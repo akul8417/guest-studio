@@ -85,19 +85,19 @@ const Page = () => {
       </section>
 
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden mt-12 rounded-2xl shadow-2xl max-w-7xl mx-auto ">
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden mt-12 rounded-2xl shadow-2xl max-w-7xl mx-auto ">
         <img
-          src="https://png.pngtree.com/background/20250215/original/pngtree-modern-interior-design-of-the-luxurious-hotel-restaurant-featuring-soft-armchairs-picture-image_13331131.jpg"
+          src="https://q-xx.bstatic.com/xdata/images/hotel/max500/613365087.jpg?k=5f930e237e47827eb6451034c7f1a79bf1fd79ab3180b3792b95cc462aeb7a37&o="
           alt="Hotel Exterior"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent"></div>
         <div className="relative z-10 text-center text-white px-4 py-12">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
-            <span className="text-yellow-400">Welcome to Our Hotel & Resort</span>
+            <span className="text-yellow-400">Guest house in your city</span>
           </h1>
           <p className="text-lg md:text-2xl mb-8 font-light drop-shadow-md">
-            Discover luxury, comfort, and unforgettable experiences in the heart of paradise. Your dream stay starts here.
+            Find the guest houses that appeal to you the most
           </p>
         </div>
       </section>
@@ -111,10 +111,10 @@ const Page = () => {
 
       {/* Discover Section */}
       <section className="max-w-7xl mx-auto mt-12 bg-white rounded-2xl shadow-xl p-10">
-        <p className="text-blue-700 font-extrabold text-center text-4xl mb-4">Discover by Our Hotel & Resort</p>
+        <p className="text-blue-700 font-extrabold text-center text-4xl mb-4">Discover by Rooms & Guest house</p>
         <hr className="mb-4 border-blue-200" />
         <p className="text-center text-lg mb-6 text-gray-700">
-          You’re invited to sample the world with Our Hotel & Resort. Designed for the everyday traveler, our hotels offer convenience in hundreds of locations across the globe. Whether you’re in town for business or exploring a new city, we give you what you need for a successful trip.
+          You’re invited to sample the world with rooms & Guest house. Designed for the everyday traveler, our rooms offer convenience in hundreds of locations across the globe. Whether you’re in town for business or exploring a new city, we give you what you need for a successful trip.
         </p>
         <div className="flex justify-center">
           <Link href="/map" className="border-4 border-red-500 rounded-lg px-10 py-3 text-blue-700 font-bold text-xl hover:bg-red-50 transition">See Our Location</Link>
@@ -123,8 +123,8 @@ const Page = () => {
 
       {/* App Section */}
       <section className="max-w-7xl mx-auto mt-12 bg-white rounded-2xl shadow-xl p-10">
-        <p className="text-4xl font-bold text-center mb-2 text-blue-700">Book Faster with Our Hotels &</p>
-        <h1 className="text-4xl font-bold text-center mb-4 text-blue-700">Resorts App</h1>
+        <p className="text-4xl font-bold text-center mb-2 text-blue-700">Book Faster with Rooms & Guest house</p><br />
+        {/* <h1 className="text-4xl font-bold text-center mb-4 text-blue-700">Resorts App</h1> */}
         <p className="text-center mb-6 text-gray-700">
           With our award-winning app, you can book stays faster at thousands of hotels worldwide, enjoy convenient in-stay features, and make the most of exciting Our Hotel & Resort Rewards member extras.
         </p>
@@ -160,7 +160,7 @@ const Page = () => {
           <a href="#" className="border-2 border-red-500 rounded-lg px-6 py-2 bg-red-500 text-white font-bold mt-2 hover:bg-red-600 transition">Click Here</a>
         </div>
         <div className="flex flex-col items-center">
-          <img src="mobile1.jpg" alt="Mobile App" className="w-[300px] h-[120px] object-cover rounded-lg mb-4 shadow" />
+          <img src="mobile.jpg" alt="Mobile App" className="w-[300px] h-[120px] object-cover rounded-lg mb-4 shadow" />
           <h1 className="text-2xl font-bold mb-2 text-blue-700">Mobile App</h1>
           <p className="mb-2 text-gray-700">Book Your Trip For Our Hotel And Resort By Mobile App</p>
           <a href="#" className="border-2 border-red-500 rounded-lg px-6 py-2 bg-red-500 text-white font-bold mt-2 hover:bg-red-600 transition">Click Here</a>

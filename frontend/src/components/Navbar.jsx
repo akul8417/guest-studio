@@ -10,8 +10,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition">
-              Luxury Hotels
+            <Link href="/" className="text-2xl font-bold text-green-800 hover:text-blue-600 transition">
+              City Guest house
             </Link>
           </div>
 

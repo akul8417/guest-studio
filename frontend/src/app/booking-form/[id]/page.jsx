@@ -66,14 +66,15 @@ export default function BookingPage() {
 
 
   return (
-    <div>
+    <div className="bg-red-to-from ">
+      
       <>
         {/* Card Section */}
-        <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto border-2 ">
           {/* Card */}
-          <div className="bg-white rounded-xl shadow-xs p-4 sm:p-7 dark:bg-neutral-900">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-neutral-200">
+          <div className="bg-white rounded-xl shadow-xs p-4 sm:p-7 dark:bg-neutral-900 border-2 ">
+            <div className="text-center mb-8 bg-blue-500">
+              <h2 className="text-3xl md:text-3xl font-bold text-gray-800 dark:text-neutral-2000  border-2">
                 Hotel Booking
               </h2>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
@@ -85,7 +86,7 @@ export default function BookingPage() {
               <div className="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
                 <label
                   htmlFor="af-payment-billing-contact"
-                  className="inline-block text-sm font-medium dark:text-white"
+                  className="inline-block text-xl font-bold dark:text-white"
                 >
                   Name
                 </label>
@@ -95,12 +96,12 @@ export default function BookingPage() {
                     type="text"
                     className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     placeholder="First Name"
-                  />
+                  /><label className="font-bold text-xl">E-mail</label>
                   <input
                     type="text"
                     className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     placeholder="Email"
-                  />
+                  /><label className="text-xl font-bold">Mobile  No.</label>
                   <input
                     type="text"
                     className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
@@ -110,24 +111,25 @@ export default function BookingPage() {
               </div>
               {/* End Section */}
               {/* Section */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-20">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-white">Check In</label>
+                  <label className="block text-sm font-medium text-black">Check In</label>
                   <input
                     type="date"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+                    className="w-35 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black px-0"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-white">Check Out</label>
+                  <label className="block text-sm font-medium text-black">Check Out</label>
                   <input
                     type="date"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+                    className="w-35 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black px-0"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-white">Guests</label>
-                  <select className="w-full p-3 border border-gray-300 border-white-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-white bg-black">
+                  <label className="block text-sm font-medium text-black">Guests</label>
+                  <select className="w-50 p-3 border border-gray-300 border-white-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black ">
+                    <option value="">select</option>
                     <option>1 Adult</option>
                     <option>2 Adults</option>
                     <option>2 Adults, 1 Child</option>

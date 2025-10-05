@@ -12,7 +12,7 @@ const page = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent"></div>
         <div className="relative z-10 text-center text-white px-4 py-12">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
-            <span className="text-yellow-400">Welcome to Our Hotel & Resort</span>
+            <span className="text-yellow-400">Welcome to city Guest house</span>
           </h1>
           <p className="text-lg md:text-2xl mb-8 font-light drop-shadow-md">
             Discover luxury, comfort, and unforgettable experiences in the heart of paradise. Your dream stay starts here.
