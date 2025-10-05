@@ -67,7 +67,7 @@ export default function BookingPage() {
 
   return (
     <div className="bg-red-to-from ">
-      
+
       <>
         {/* Card Section */}
         <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto border-2 ">
