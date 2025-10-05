@@ -3,8 +3,13 @@ import React, { useState } from "react";
 
 import axios from "axios";
 import { IconToolsKitchen } from "@tabler/icons-react";
+import toast from "react-hot-toast";
+import usestate from "usestate";
+import { useRouter } from "next/navigation";
 
 export default function AuthForm() {
+
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -12,7 +17,6 @@ export default function AuthForm() {
     password: "",
     confirmPassword: "",
   });
-
 
   const [errors, setErrors] = useState({});
 
@@ -51,9 +55,26 @@ export default function AuthForm() {
     e.preventDefault();
     if (validate()) {
       if (isLogin) {
-        alert(`Logged in with Email: ${formData.email}`);
+
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/authenticate`,
+          { email: formData.email, password: formData.password })
+          .then((result) => {
+            toast.success('Loggedin successfully');
+            router.push('/');
+          }).catch((err) => {
+            toast.error('Invalid Credentials');
+            console.log(err);
+          });
+
       } else {
-        alert(`Signed up as ${formData.name} with Email: ${formData.email}`);
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/add`, formData)
+          .then((result) => {
+            toast.success('Account Created Successfully');
+            setIsLogin(true);
+          }).catch((err) => {
+            console.log(err);
+            toast.error('Error Creating Account');
+          });
       }
     }
   };
@@ -84,7 +105,7 @@ export default function AuthForm() {
       console.error("Error sending data to backend:", error);
     }
   };
- 
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-200 via-purple-100 to-pink-100  ">

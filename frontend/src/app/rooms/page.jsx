@@ -100,10 +100,10 @@ const HomePage = () => {
                 <p className='text-gray-500 mb-1'>{room.city}</p>
                 <p className='text-gray-500 mb-1'>{room.address}</p>
                 <p className='text-gray-500 mb-1'>{room.numberOfRooms}</p>
-                
+
                 <div className="flex justify-between items-center">
                   <span className="text-green-600 font-bold">{room.priceperNight}</span>
-                  <Link href="booking-form" className="bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">
+                  <Link href={"/booking-form/" + room._id} className="bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition">
                     Book Now
                   </Link>
                 </div>

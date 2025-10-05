@@ -3,56 +3,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
-
-export default function BookingPage() {
-  const { id } = useParams(); 
-  const [booking, setBooking] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Axios instance
-  const API = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/bookings", 
-  });
-
-  useEffect(() => {
-    const fetchBooking = async () => {
-      try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/bookings/${id}`
-      );
-
-  
-
-
-        setBooking(res.data);
-      } catch (err) {
-        console.error("Booking fetch error:", err);
-        setBooking(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) fetchBooking();
-  }, [id]);
-
-  if  (loading) return <p className="p-4">Loading booking details...</p>;
-
-  if (!booking) return <p className="p-4 text-red-600">Booking not found ❌</p>;
-
-  return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Booking Details</h1>
-      <p><strong>User:</strong> {booking.user?.name || "N/A"}</p>
-      <p><strong>Email:</strong> {booking.user?.email || "N/A"}</p>
-      <p><strong>Room:</strong> {booking.room?.name || "N/A"}</p>
-      <p><strong>Room Type:</strong> {booking.room?.type || "N/A"}</p>
-      <p><strong>Price:</strong> ₹{booking.room?.price || "N/A"}</p>
-      <p><strong>Date:</strong> {booking.date ? new Date(booking.date).toLocaleDateString() : "N/A"}</p>
-    </div>
-  );
-}
-
+import usestate from "usestate";
+import toast from "react-hot-toast";
 
 const paymentMethods = [
   {
@@ -81,8 +33,37 @@ const paymentMethods = [
   },
 ];
 
-const booking = () => {
+export default function BookingPage() {
+  const { id } = useParams();
+  const [booking, setBooking] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [roomData, setRoomData] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
+
+  const fetchRoomData = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/room/getbyid/${id}`)
+      const data = res.data;
+      console.log(data);
+      setRoomData(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error('some error occured');
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchRoomData();
+  }, [])
+
+
+
+  if (loading) return <p className="p-4">Loading booking details...</p>;
+
 
   return (
     <div>
