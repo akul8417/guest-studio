@@ -1,201 +1,287 @@
-// src/app/user-booking/[id]/page.jsx
 'use client';
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
-import usestate from "usestate";
+import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
-const paymentMethods = [
-  {
-    id: 'card',
-    label: 'Credit/Debit Card',
-    description: 'Pay securely using your card.',
-    icon: (
-      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <rect x="2" y="7" width="20" height="10" rx="2" />
-        <path d="M2 11h20" />
-      </svg>
-    ),
-  },
-
-
-  {
-    id: 'upi',
-    label: 'UPI',
-    description: 'Pay via UPI apps.',
-    icon: (
-      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path d="M4 17v-6a4 4 0 014-4h8a4 4 0 014 4v6" />
-        <path d="M8 21h8" />
-      </svg>
-    ),
-  },
-];
+import Link from "next/link";
 
 export default function BookingPage() {
   const { id } = useParams();
-  const [booking, setBooking] = useState(null);
+  const router = useRouter();
+
+  // form state
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    MobileNo: "",
+    checkIn: "",
+    checkOut: "",
+    guest: "",
+    paymentMethods: "",
+  });
+
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
   const [roomData, setRoomData] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
+  const [selectedMethod, setSelectedMethod] = useState("");
 
+  const paymentMethods = [
+    {
+      id: "card",
+      label: "Credit/Debit Card",
+      description: "Pay securely using your card.",
+      icon: (
+        <svg
+          className="w-6 h-6 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <rect x="2" y="7" width="20" height="10" rx="2" />
+          <path d="M2 11h20" />
+        </svg>
+      ),
+    },
+    {
+      id: "upi",
+      label: "UPI",
+      description: "Pay via UPI apps.",
+      icon: (
+        <svg
+          className="w-6 h-6 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path d="M4 17v-6a4 4 0 014-4h8a4 4 0 014 4v6" />
+          <path d="M8 21h8" />
+        </svg>
+      ),
+    },
+  ];
+
+  // ✅ validation logic
+  const validate = () => {
+    const newErrors = {};
+
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(form.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!form.MobileNo.trim()) {
+      newErrors.MobileNo = "Mobile number is required";
+    } else if (!/^[6-9]\d{9}$/.test(form.MobileNo)) {
+      newErrors.MobileNo = "Enter a valid 10-digit mobile number";
+    }
+
+    if (!form.checkIn) newErrors.checkIn = "Check-in date is required";
+    if (!form.checkOut) newErrors.checkOut = "Check-out date is required";
+    if (form.checkIn && form.checkOut && form.checkOut <= form.checkIn)
+      newErrors.checkOut = "Check-out must be after check-in date";
+
+    if (!form.guest) newErrors.guest = "Please select number of guests";
+    if (!form.paymentMethods)
+      newErrors.paymentMethods = "Please select a payment method";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // ✅ submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validate()) {
+      toast.error("Please fill all required fields correctly");
+      return;
+    }
+
+    try {
+      // You can also save form data to backend here
+      // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/booking/create`, form);
+
+      toast.success("Booking submitted successfully!");
+      router.push("/payment"); // ✅ redirect to payment page
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while submitting");
+    }
+  };
+
+  // ✅ fetch room data
   const fetchRoomData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/room/getbyid/${id}`)
-      const data = res.data;
-      console.log(data);
-      setRoomData(data);
-      setLoading(false);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/room/getbyid/${id}`
+      );
+      setRoomData(res.data);
     } catch (error) {
-      console.log(error);
-      toast.error('some error occured');
+      console.error(error);
+      toast.error("Error fetching room details");
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchRoomData();
-  }, [])
+  }, []);
 
-
-
-  if (loading) return <p className="p-4">Loading booking details...</p>;
-
+  if (loading) return <p className="p-4 text-center">Loading booking details...</p>;
 
   return (
-    <div className="bg-red-to-from ">
+    <div className="bg-gray-100 min-h-screen py-10">
+      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6 border">
+        <h2 className="text-3xl font-bold text-center text-blue-600 mb-8">
+          Hotel Booking
+        </h2>
 
-      <>
-        {/* Card Section */}
-        <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto border-2 ">
-          {/* Card */}
-          <div className="bg-white rounded-xl shadow-xs p-4 sm:p-7 dark:bg-neutral-900 border-2 ">
-            <div className="text-center mb-8 bg-blue-500">
-              <h2 className="text-3xl md:text-3xl font-bold text-gray-800 dark:text-neutral-2000  border-2">
-                Hotel Booking
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+        <form onSubmit={handleSubmit}>
+          {/* Name */}
+          <label className="block font-semibold">Full Name</label>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="w-full border rounded-lg p-2 mb-2"
+            placeholder="Enter your full name"
+          />
+          {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
 
-              </p>
+          {/* Email */}
+          <label className="block font-semibold">Email</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="w-full border rounded-lg p-2 mb-2"
+            placeholder="Enter your email"
+          />
+          {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+
+          {/* Mobile */}
+          <label className="block font-semibold">Mobile Number</label>
+          <input
+            type="text"
+            value={form.MobileNo}
+            onChange={(e) => setForm({ ...form, MobileNo: e.target.value })}
+            className="w-full border rounded-lg p-2 mb-2"
+            placeholder="10-digit mobile number"
+          />
+          {errors.MobileNo && (
+            <p className="text-red-500 text-sm mb-2">{errors.MobileNo}</p>
+          )}
+
+          {/* Dates */}
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div>
+              <label className="block font-semibold">Check In</label>
+              <input
+                type="date"
+                value={form.checkIn}
+                onChange={(e) => setForm({ ...form, checkIn: e.target.value })}
+                className="w-full border rounded-lg p-2"
+              />
+              {errors.checkIn && (
+                <p className="text-red-500 text-sm">{errors.checkIn}</p>
+              )}
             </div>
-            <form>
-              {/* Section */}
-              <div className="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                <label
-                  htmlFor="af-payment-billing-contact"
-                  className="inline-block text-xl font-bold dark:text-white"
-                >
-                  Name
-                </label>
-                <div className="mt-2 space-y-3">
-                  <input
-                    id="af-payment-billing-contact"
-                    type="text"
-                    className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                    placeholder="First Name"
-                  /><label className="font-bold text-xl">E-mail</label>
-                  <input
-                    type="text"
-                    className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                    placeholder="Email"
-                  /><label className="text-xl font-bold">Mobile  No.</label>
-                  <input
-                    type="text"
-                    className="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                    placeholder="Phone Number"
-                  />
-                </div>
-              </div>
-              {/* End Section */}
-              {/* Section */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-20">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-black">Check In</label>
-                  <input
-                    type="date"
-                    className="w-35 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black px-0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-black">Check Out</label>
-                  <input
-                    type="date"
-                    className="w-35 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black px-0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-black">Guests</label>
-                  <select className="w-50 p-3 border border-gray-300 border-white-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-black ">
-                    <option value="">select</option>
-                    <option>1 Adult</option>
-                    <option>2 Adults</option>
-                    <option>2 Adults, 1 Child</option>
-                    <option>2 Adults, 2 Children</option>
-                  </select>
-                </div>
 
-              </div>
-              {/* End Section */}
-              {/* Section */}
-              <div className="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+            <div>
+              <label className="block font-semibold">Check Out</label>
+              <input
+                type="date"
+                value={form.checkOut}
+                onChange={(e) => setForm({ ...form, checkOut: e.target.value })}
+                className="w-full border rounded-lg p-2"
+              />
+              {errors.checkOut && (
+                <p className="text-red-500 text-sm">{errors.checkOut}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Guests */}
+          <div className="mt-4">
+            <label className="block font-semibold">Guests</label>
+            <select
+              value={form.guest}
+              onChange={(e) => setForm({ ...form, guest: e.target.value })}
+              className="w-full border rounded-lg p-2"
+            >
+              <option value="">Select guests</option>
+              <option value="1 Adult">1 Adult</option>
+              <option value="2 Adults">2 Adults</option>
+              <option value="2 Adults, 1 Child">2 Adults, 1 Child</option>
+              <option value="2 Adults, 2 Children">2 Adults, 2 Children</option>
+            </select>
+            {errors.guest && <p className="text-red-500 text-sm">{errors.guest}</p>}
+          </div>
+
+          {/* Payment */}
+          <div className="mt-6">
+            <label className="block text-sm font-bold mb-2">Payment Method</label>
+            <div className="space-y-3">
+              {paymentMethods.map((method) => (
                 <label
-                  htmlFor="af-payment-payment-method"
-                  className="inline-block text-sm font-medium dark:text-white"
+                  key={method.id}
+                  className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer ${
+                    selectedMethod === method.id
+                      ? "border-blue-600 bg-blue-50"
+                      : "border-gray-300"
+                  }`}
                 >
-                  Payment method
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={method.id}
+                    checked={selectedMethod === method.id}
+                    onChange={() => {
+                      setSelectedMethod(method.id);
+                      setForm({ ...form, paymentMethods: method.id });
+                    }}
+                  />
+                  {method.icon}
+                  <div>
+                    <div className="font-medium">{method.label}</div>
+                    <div className="text-sm text-gray-500">
+                      {method.description}
+                    </div>
+                  </div>
                 </label>
-                <div className="mt-2 space-y-3">
-                  {paymentMethods.map((method) => (
-                    <label
-                      key={method.id}
-                      className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition ${selectedMethod === method.id
-                        ? 'border-blue-600 bg-blue-50 dark:bg-blue-900'
-                        : 'border-gray-200 dark:border-neutral-700'
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method.id}
-                        checked={selectedMethod === method.id}
-                        onChange={() => setSelectedMethod(method.id)}
-                        className="accent-blue-600"
-                      />
-                      <span>{method.icon}</span>
-                      <div>
-                        <div className="font-medium text-gray-800 dark:text-neutral-200">{method.label}</div>
-                        <div className="text-sm text-gray-500 dark:text-neutral-400">{method.description}</div>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              {/* End Section */}
-            </form>
-            <div className="mt-5 flex justify-end gap-x-2">
+              ))}
+            </div>
+            {errors.paymentMethods && (
+              <p className="text-red-500 text-sm">{errors.paymentMethods}</p>
+            )}
+          </div>
+
+          {/* Buttons */}
+          <div className="mt-6 flex justify-end gap-3">
+            <Link href="/rooms">
               <button
                 type="button"
-                className="py-1.5 sm:py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100"
               >
                 Cancel
               </button>
-              <button
-                type="button"
-                className="py-1.5 sm:py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                Submit
-              </button>
-            </div>
+            </Link>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Submit
+            </button>
           </div>
-          {/* End Card */}
-        </div>
-        {/* End Card Section */}
-      </>
-
-
+        </form>
+      </div>
     </div>
-  )
+  );
 }
