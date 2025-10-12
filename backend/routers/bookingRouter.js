@@ -1,28 +1,20 @@
 // backend/routers/userRouter.js (CommonJS)
 const express = require('express');
-const User = require('../models/bookingModel'); // CommonJS model
+const Model = require('../models/bookingModel'); // CommonJS model
 const jwt = require('jsonwebtoken');
+const { verifyToken } = require('../middlewares/auth');
 
 
 const router = express.Router();
 
 
 // Signup / Add user
-router.post('/add', async (req, res) => {
+router.post('/add', verifyToken, async (req, res) => {
   try {
-    const { name, email, password, city } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    const newUser = new User({ name, email, password, city });
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    req.body.user = req.user._id;
+    console.log(req.body);
+    const savedData = await new Model(req.body).save();
+    res.status(201).json(savedData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error', error: err });
@@ -33,7 +25,7 @@ router.post('/add', async (req, res) => {
 // Get all users
 router.get('/getall', async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await Model.find();
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
@@ -43,7 +35,7 @@ router.get('/getall', async (req, res) => {
 // Get user by email
 router.get('/getbyemail/:email', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params.email });
+    const user = await Model.findOne({ email: req.params.email });
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);
@@ -53,7 +45,7 @@ router.get('/getbyemail/:email', async (req, res) => {
 // Get user by ID
 router.get('/getbyid/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await Model.findById(req.params.id);
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);
@@ -63,7 +55,7 @@ router.get('/getbyid/:id', async (req, res) => {
 // Update user
 router.put('/update/:id', async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedUser = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json(err);
@@ -73,7 +65,7 @@ router.put('/update/:id', async (req, res) => {
 // Delete user
 router.delete('/delete/:id', async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    const deletedUser = await Model.findByIdAndDelete(req.params.id);
     res.status(200).json(deletedUser);
   } catch (err) {
     res.status(500).json(err);

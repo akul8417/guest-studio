@@ -60,6 +60,7 @@ export default function AuthForm() {
           { email: formData.email, password: formData.password })
           .then((result) => {
             toast.success('Loggedin successfully');
+            localStorage.setItem('token', result.data.token);
             router.push('/');
           }).catch((err) => {
             toast.error('Invalid Credentials');
@@ -109,8 +110,8 @@ export default function AuthForm() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-200 via-purple-100 to-pink-100  ">
-    
-      <div className="bg-gray-100 shadow-2xl rounded-3xl p-10 w-full max-w-md transition-all duration-300 hover:scale-105"> 
+
+      <div className="bg-gray-100 shadow-2xl rounded-3xl p-10 w-full max-w-md transition-all duration-300 hover:scale-105">
         <h2 className="text-3xl font-extrabold mb-6 text-center text-blue-700 drop-shadow">
           {isLogin ? "Login" : "Signup"}
         </h2>

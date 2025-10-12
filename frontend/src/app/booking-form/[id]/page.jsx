@@ -25,6 +25,7 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [roomData, setRoomData] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState("");
+  const token = localStorage.getItem('token');
 
   const paymentMethods = [
     {
@@ -104,10 +105,13 @@ export default function BookingPage() {
 
     try {
       // You can also save form data to backend here
-      // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/booking/create`, form);
-
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/booking/add`, form, {
+        headers: {
+          'Authorization' : `Bearer ${token}`
+        }
+      });
       toast.success("Booking submitted successfully!");
-      router.push("/payment"); // ✅ redirect to payment page
+      // router.push("/payment"); // ✅ redirect to payment page
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong while submitting");
@@ -232,11 +236,10 @@ export default function BookingPage() {
               {paymentMethods.map((method) => (
                 <label
                   key={method.id}
-                  className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer ${
-                    selectedMethod === method.id
+                  className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer ${selectedMethod === method.id
                       ? "border-blue-600 bg-blue-50"
                       : "border-gray-300"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
