@@ -173,7 +173,7 @@ export default function BookingPage() {
           {/* Mobile */}
           <label className="block font-semibold">Mobile Number</label>
           <input
-            type="text"
+            type="Number"
             value={form.MobileNo}
             onChange={(e) => setForm({ ...form, MobileNo: e.target.value })}
             className="w-full border rounded-lg p-2 mb-2"
@@ -215,17 +215,7 @@ export default function BookingPage() {
           {/* Guests */}
           <div className="mt-4">
             <label className="block font-semibold">Guests</label>
-            <select
-              value={form.guest}
-              onChange={(e) => setForm({ ...form, guest: e.target.value })}
-              className="w-full border rounded-lg p-2"
-            >
-              <option value="">Select guests</option>
-              <option value="1 Adult">1 Adult</option>
-              <option value="2 Adults">2 Adults</option>
-              <option value="2 Adults, 1 Child">2 Adults, 1 Child</option>
-              <option value="2 Adults, 2 Children">2 Adults, 2 Children</option>
-            </select>
+            <input type="Number" value={form.guest} onChange={(e) => setForm({ ...form, guest: e.target.value })} className="w-full border rounded-lg p-2" placeholder="Enter number of guests" />
             {errors.guest && <p className="text-red-500 text-sm">{errors.guest}</p>}
           </div>
 

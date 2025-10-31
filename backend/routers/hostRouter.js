@@ -27,7 +27,7 @@ router.post("/register", async (req, res) => {
 // Host login
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { emaill, password } = req.body;
 
         // Find host by email
         const host = await Host.findOne({ email });

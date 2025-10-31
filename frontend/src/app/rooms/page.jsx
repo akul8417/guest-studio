@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -8,6 +8,8 @@ import usestate from 'usestate';
 const HomePage = () => {
   const [rooms, setRooms] = useState(1);
   const [guests, setGuests] = useState(1);
+
+  
 
   const [roomsData, setRoomsData] = useState([]);
 
