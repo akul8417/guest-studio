@@ -141,7 +141,7 @@ export default function BookingPage() {
   if (loading) return <p className="p-4 text-center">Loading booking details...</p>;
 
   return (
-    <div className="bg-gray-100 min-h-screen py-10">
+    <div className="bg-gray-100 min-h-screen py-20">
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6 border">
         <h2 className="text-3xl font-bold text-center text-blue-600 mb-8">
           Hotel Booking
